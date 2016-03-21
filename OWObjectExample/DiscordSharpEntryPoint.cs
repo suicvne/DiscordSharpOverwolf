@@ -13,6 +13,7 @@ namespace OWObjectExample
             action.Invoke("Test Username");
         }
 
+        #region Events
         #region Full connected
         private bool IsFullyConnected = false;
         public bool GetIsFullyConnected() { return IsFullyConnected; }
@@ -67,6 +68,38 @@ namespace OWObjectExample
                 StackTrace = LastException.StackTrace
             };
             callback.Invoke(exceptionCallbackObject);
+        }
+        #endregion
+        #endregion
+
+        #region Getters
+        public void GetServerByName(Action<object> callback, string name)
+        {
+            DiscordServer server = client.GetServersList().Find(x => x.name.ToLower() == name.ToLower());
+            if(server != null)
+            {
+                object serverCallbackObject = new
+                {
+                    ServerName = server.name,
+                    ServerID = server.id,
+                    ServerIcon = server.IconURL
+                };
+                callback.Invoke(serverCallbackObject);
+            }
+        }
+        public void GetServerByID(Action<object> callback, string id)
+        {
+            DiscordServer server = client.GetServersList().Find(x => x.id == id);
+            if (server != null)
+            {
+                object serverCallbackObject = new
+                {
+                    ServerName = server.name,
+                    ServerID = server.id,
+                    ServerIcon = server.IconURL
+                };
+                callback.Invoke(serverCallbackObject);
+            }
         }
         #endregion
 

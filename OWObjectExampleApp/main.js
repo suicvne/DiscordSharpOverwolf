@@ -22,6 +22,18 @@ function onConnect(eventData)
     _discordSharpObject.SetCurrentGame("Overwolf Binding");
     _discordSharpObject.MessageReceived.addListener(onMessage);
     _discordSharpObject.OnDisconnect.addListener(onClose);
+
+    _discordSharpObject.GetServerByName(function callback(value)
+    {
+        if(value != null)
+        {
+            console.log("got server! Name: " + value.ServerName + " ID: " + value.ServerID);
+        }
+        else
+        {
+            console.log("unable to retrieve server!");
+        }
+    }, "Tea and Programming");
 }
 
 function onClose()

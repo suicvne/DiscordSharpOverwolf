@@ -36,31 +36,28 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="AsyncBridge.Net35, Version=0.0.0.0, Culture=neutral, PublicKeyToken=b3b1c0202c0d6a87, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Latest DiscordSharp Net 3.5\AsyncBridge.Net35.dll</HintPath>
+    <Reference Include="AsyncBridge.Net35">
+      <HintPath>..\Latest DiscordSharp Net 3.5\AsyncBridge.Net35.dll</HintPath>
     </Reference>
-    <Reference Include="DiscordSharp, Version=0.6.0.4, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Latest DiscordSharp Net 3.5\DiscordSharp.dll</HintPath>
+    <Reference Include="DiscordSharp">
+      <HintPath>..\Latest DiscordSharp Net 3.5\DiscordSharp.dll</HintPath>
     </Reference>
     <Reference Include="NAudio">
-      <HintPath>..\..\Latest DiscordSharp Net 3.5\NAudio.dll</HintPath>
+      <HintPath>..\Latest DiscordSharp Net 3.5\NAudio.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Latest DiscordSharp Net 3.5\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Threading, Version=1.0.2856.102, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Latest DiscordSharp Net 3.5\System.Threading.dll</HintPath>
+    <Reference Include="System.Threading">
+      <HintPath>..\Latest DiscordSharp Net 3.5\System.Threading.dll</HintPath>
     </Reference>
     <Reference Include="websocket-sharp">
-      <HintPath>..\..\Latest DiscordSharp Net 3.5\websocket-sharp.dll</HintPath>
+      <HintPath>..\Latest DiscordSharp Net 3.5\websocket-sharp.dll</HintPath>
     </Reference>
     <Reference Include="WebSocket4Net">
-      <HintPath>..\..\Latest DiscordSharp Net 3.5\WebSocket4Net.dll</HintPath>
+      <HintPath>..\Latest DiscordSharp Net 3.5\WebSocket4Net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
