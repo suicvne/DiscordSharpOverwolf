@@ -84,6 +84,60 @@ function doLogin(form)
 	}
 }
 
+function clearMessageInputForm(form, succeeded)
+{
+    //form.serverName.value = "";
+    //form.channelName.value = "";
+    form.messageText.value = "";
+}
+function sendMessage(form)
+{
+    //getters
+    var serverName, channelName, messageToSend;
+    serverName = form.serverName.value;
+    channelName = form.channelName.value;
+    messageToSend = form.messageText.value;
+    //
+
+    //CLR
+    var serverID, channelID;
+    _discordSharpObject.GetServerByName(function callback(value)
+    {
+        if (value != null) {
+            serverID = value.ServerID;
+        }
+        else {
+            clearMessageInputForm(form, 0);
+            return;
+        }
+    }, serverName);
+
+    _discordSharpObject.GetChannelByName(function callback(value)
+    {
+        if (value != null) {
+            channelID = value.ChannelID;
+        }
+        else {
+            clearMessageInputForm(form, 0);
+            return;
+        }
+    }, serverID, channelName);
+    //
+
+    //Let's send
+    _discordSharpObject.SendMessage(function callback(value) {
+        if(value != undefined) //message succeed
+        {
+            clearMessageInputForm(form, 1);
+        }
+        else
+        {
+            console.error("Failed to send message");
+        }
+    }, serverID, channelID, messageToSend);
+    //
+}
+
 function doLogout(form)
 {
     _discordSharpObject.Logout();

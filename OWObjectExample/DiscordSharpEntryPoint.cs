@@ -1,6 +1,8 @@
 ﻿using System;
 using DiscordSharp;
 using DiscordSharp.Objects;
+using System.Reflection;
+using System.Collections.Generic;
 
 namespace OWObjectExample
 {
@@ -73,6 +75,29 @@ namespace OWObjectExample
         #endregion
 
         #region Getters
+        private const string ObjectDelimiter = "Discord";
+        //Sorry, I just got used to Objective C wordy styled calls :D
+        //borked
+        private static object ConvertDiscordObjectToJavascriptObject(object discordObject, Type T)
+        {
+            //Raw name of the object in code
+            //DiscordMessage
+            string nameofObject = T.ToString();
+            string subName = nameofObject.Substring(nameofObject.LastIndexOf(ObjectDelimiter) + ObjectDelimiter.Length); //what the object actually is. Message
+
+            PropertyInfo[] properties = T.GetProperties(); //get instance only public properties
+            object returnValue = new object();
+            Dictionary<string, object> returnValueAsDict = (Dictionary<string, object>)returnValue.ToDictionary();
+            foreach (var info in properties)
+            {
+                string anonPropName = subName + info.Name;
+                Console.WriteLine("CLR: Binding property " + info.Name + " as " + subName + info.Name);
+                //returnValueAsDict.AddProperty(anonPropName, info.GetValue(discordObject, null));
+                returnValueAsDict.Add(anonPropName, info.GetValue(discordObject, null));
+            }
+            returnValue = returnValueAsDict;
+            return (object)returnValueAsDict;
+        }
         public void GetServerByName(Action<object> callback, string name)
         {
             DiscordServer server = client.GetServersList().Find(x => x.name.ToLower() == name.ToLower());
@@ -101,6 +126,70 @@ namespace OWObjectExample
                 callback.Invoke(serverCallbackObject);
             }
         }
+
+        public void GetChannelByName(Action<object> callback, string serverID, string name)
+        {
+            DiscordServer server = client.GetServersList().Find(x => x.id == serverID);
+            if(server != null)
+            {
+                DiscordChannel channel = server.channels.Find(x => x.Name.ToLower() == name.ToLower().Trim('#'));
+                if(channel != null)
+                {
+                    object channelCallbackObject = new
+                    {
+                        ChannelName = channel.Name,
+                        ChannelID = channel.ID,
+                        ChannelTopic = channel.Topic
+                    };
+                    callback.Invoke(channelCallbackObject);
+                }
+            }
+        }
+        public void GetChannelByID(Action<object> callback, string serverID, string id)
+        {
+            DiscordServer server = client.GetServersList().Find(x => x.id == serverID);
+            if (server != null)
+            {
+                DiscordChannel channel = server.channels.Find(x => x.ID == id);
+                if (channel != null)
+                {
+                    object channelCallbackObject = new
+                    {
+                        ChannelName = channel.Name,
+                        ChannelID = channel.ID,
+                        ChannelTopic = channel.Topic
+                    };
+                    callback.Invoke(channelCallbackObject);
+                }
+            }
+        }
+        #endregion
+
+        #region Send Messages
+
+        public void SendMessage(Action<object> callback, string serverID, string channelID, string message)
+        {
+            DiscordServer server = client.GetServersList().Find(x => x.id == serverID);
+            if(server != null)
+            {
+                DiscordChannel channel = server.channels.Find(x => x.ID == channelID);
+                if(channel != null)
+                {
+                    DiscordMessage messageSent = channel.SendMessage(message);
+                    object messageCallback = new
+                    {
+                        MessageID = messageSent.id,
+                        MessageContent = messageSent.content,
+                        MessageChannelID = messageSent.Channel().ID,
+                        MessageServerID = messageSent.Channel().parent.id,
+                        MessageAuthorID = messageSent.author.ID
+                    };
+                    callback.Invoke(messageCallback);
+                }
+            }
+            callback.Invoke(null);
+        }
+
         #endregion
 
         public DiscordSharpEntryPoint() { } //explicit ctor

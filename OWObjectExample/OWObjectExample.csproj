@@ -33,6 +33,7 @@
   <ItemGroup>
     <Compile Include="DiscordSharpEntryPoint.cs" />
     <Compile Include="EntryPoint.cs" />
+    <Compile Include="Helpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
