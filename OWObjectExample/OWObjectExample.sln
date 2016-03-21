@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OWObjectExample", "OWObjectExample.csproj", "{C0601403-0397-4D7E-97AC-F39BD93A3C98}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C0601403-0397-4D7E-97AC-F39BD93A3C98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0601403-0397-4D7E-97AC-F39BD93A3C98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0601403-0397-4D7E-97AC-F39BD93A3C98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0601403-0397-4D7E-97AC-F39BD93A3C98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B189394-0B91-4BFF-B4FB-5CEA51174C09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B189394-0B91-4BFF-B4FB-5CEA51174C09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B189394-0B91-4BFF-B4FB-5CEA51174C09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B189394-0B91-4BFF-B4FB-5CEA51174C09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E0FF3A4-D644-4316-881C-3692984A43F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E0FF3A4-D644-4316-881C-3692984A43F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E0FF3A4-D644-4316-881C-3692984A43F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E0FF3A4-D644-4316-881C-3692984A43F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19B55A84-74DD-4DFE-95EA-699DAC55C4AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19B55A84-74DD-4DFE-95EA-699DAC55C4AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19B55A84-74DD-4DFE-95EA-699DAC55C4AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19B55A84-74DD-4DFE-95EA-699DAC55C4AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F2FA755-35EA-4E68-A329-581CF3AC8D4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F2FA755-35EA-4E68-A329-581CF3AC8D4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F2FA755-35EA-4E68-A329-581CF3AC8D4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F2FA755-35EA-4E68-A329-581CF3AC8D4F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

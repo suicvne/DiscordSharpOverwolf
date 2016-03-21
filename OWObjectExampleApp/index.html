@@ -1,0 +1,45 @@
+<html>
+<head>
+    <style>
+        form
+        {
+            background-color: #111111;
+            color: #FFFFFF;
+            font-family: sans-serif;
+        }
+        body
+        {
+            background-color: #111111;
+            color: #FFFFFF;
+            font-family: sans-serif;
+        }
+        ul
+        {
+            background-color: #333333;
+            font-family: monospace;
+            border: medium;
+        }
+        nav ul{height:200px; width:18%}
+        nav ul{overflow:hidden; overflow-y:scroll;}
+    </style>
+    <title>DiscordSharp Binding Test</title>
+</head>
+<body>
+  <iframe name="lol" style="display:none;"></iframe>
+    <p id="kek">:)</p>
+  <form action="#" onsubmit="doLogin(this)" onreset="doLogout(this)" target="lol">
+    Discord Email:
+    <input type="text" id="emailText" name="emailTextInput"><br>
+    Discord Password:
+    <input type="password" id="passwordText" name="passwordTextInput"><br>
+    <input type="submit" name="submitButton" value="Submit"><br>
+    <input type="reset" name="logoutButton" value="Dispose/Logout"/><br />
+  </form>
+
+    <ul id="messageLog">
+
+    </ul>
+
+  <script src="main.js"></script>
+</body>
+</html>

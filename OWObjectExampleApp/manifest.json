@@ -1,0 +1,53 @@
+{
+  "manifest_version": "1",
+  "type": "WebApp",
+  "meta": {
+    "name": "DiscordSharp Binding Test",
+    "version": "1.0.0",
+    "minimum-overwolf-version": "0.91.145.0",
+    "author": "Axiom",
+    "icon": "icon.png",
+    "icon_gray": "icon_gray.png",
+    "description": "DiscordSharp binding test."
+  },
+  "data": {
+    "start_window": "index",
+    "windows": {
+      "index": {
+        "file": "index.html",
+        "transparent": false,
+        "resizable": true,
+        "show_in_taskbar": true,
+        "size": {
+          "width": 500,
+          "height": 500
+        }
+      }
+    },
+    "extra-objects": {
+      "extraObject1": {
+        "file": "OWObjectExample.dll",
+        "class": "OWObjectExample.EntryPoint"
+      },
+      "discordSharpEntryObject": {
+        "file": "OWObjectExample.dll",
+        "class": "OWObjectExample.DiscordSharpEntryPoint"
+      },
+      "discordSharpClientRaw": {
+        "file": "DiscordSharp.dll",
+        "class": "DiscordSharp.DiscordClient"
+      },
+      "discordSharpDiscordMember": {
+        "file": "DiscordSharp.dll",
+        "class": "DiscordSharp.Objects.DiscordMember"
+      },
+      "discordSharpDiscordMessage": {
+        "file": "DiscordSharp.dll",
+        "class": "DiscordSharp.Objects.DiscordMessage"
+      }
+    },
+  "permissions": [
+    "Extensions"
+  ]
+  }
+}
