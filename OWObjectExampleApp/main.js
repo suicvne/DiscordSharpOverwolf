@@ -5,11 +5,32 @@ function onMyEvent(eventData)
 	console.log("Received my event: " + eventData);
 }
 
+function onLog(eventData)
+{
+    _discordSharpObject.GetLastLogMessage(function callback(value) {
+        if(value != null)
+        {
+            //Debug, Unecessary, Critical, Error
+            if (value.Level == "Critical" || value.Level == "Error") {
+                console.log(value.Level + ": " + value.Message);
+                window.alert("An error has occurred in DiscordSharp!\n\n" + value.Message);
+            }
+        }
+    });
+}
+
+function onVoiceLog(eventData)
+{
+    _discordSharpObject.GetLastVoiceLogMessage(function callback(value) {
+        if(value != null)
+        {
+            console.log("[Voice Client " + value.Level + "] " + value.Message);
+        }
+    });
+}
+
 function onConnect(eventData)
 {
-    console.log("ayyyyyyyy we good");
-    //console.log("Connected as user: " + _discordSharpObject.GetMeUsername());
-
     _discordSharpObject.GetMeUsername(function callback(value)
     {
         if (value != null)
@@ -22,18 +43,6 @@ function onConnect(eventData)
     _discordSharpObject.SetCurrentGame("Overwolf Binding");
     _discordSharpObject.MessageReceived.addListener(onMessage);
     _discordSharpObject.OnDisconnect.addListener(onClose);
-
-    _discordSharpObject.GetServerByName(function callback(value)
-    {
-        if(value != null)
-        {
-            console.log("got server! Name: " + value.ServerName + " ID: " + value.ServerID);
-        }
-        else
-        {
-            console.log("unable to retrieve server!");
-        }
-    }, "Tea and Programming");
 }
 
 function onClose()
@@ -47,14 +56,11 @@ function onClose()
 
 function onMessage()
 {
-    //console.log("Message received!");
     _discordSharpObject.GetLastMessageReceived(function callback(value)
     {
         var msg = "--Message received from " + value.AuthorName + " in #" + value.ChannelName + " on " + value.ServerName + ": " + value.Content;
-        //var msg = "--Message received: " + value.Content;
         console.log(msg);
         document.getElementById("messageLog").innerHTML += "<li>" + msg + "</li><br/>";
-        //window.scrollTo(0, document.body.scrollHeight);
     });
 }
 
@@ -68,6 +74,32 @@ function onException()
     });
 }
 
+function testVoice(form)
+{
+    var serverID, channelID;
+    _discordSharpObject.GetServerByName(function callback(value) {
+        if (value != null)
+            serverID = value.ServerID;
+    }, "DiscordSharp Test Server");
+    _discordSharpObject.GetChannelByName(function callback(value) {
+        if (value != null)
+            channelID = value.ChannelID;
+    }, serverID, "Testing", true); //true for voice channels only
+
+    
+        _discordSharpObject.BeginVoiceConnect(function callback(value)
+        {
+            if(value != null)
+            {
+                if (value.Message == "Connected!") {
+                    console.log("Connected to voice!");
+                }
+                else
+                    console.log(value.Message);
+            }
+        }, serverID, channelID);
+}
+
 function doLogin(form)
 {
 	var email, password;
@@ -78,16 +110,22 @@ function doLogin(form)
 	{
 		console.log("Logging in");
 		_discordSharpObject.Login(email, password);
+		window.localStorage.setItem("discordUsername", email);
+		window.localStorage.setItem("discordPassword", password);
 	}
 	else {
 		console.log("DiscordSharp object is null?!?!?!?!");
 	}
 }
 
+function onLoad(form)
+{
+    form.emailText.value = window.localStorage.getItem("discordUsername");
+    form.passwordTe.value = window.localStorage.getItem("discordPassword");
+}
+
 function clearMessageInputForm(form, succeeded)
 {
-    //form.serverName.value = "";
-    //form.channelName.value = "";
     form.messageText.value = "";
 }
 function sendMessage(form)
@@ -153,6 +191,8 @@ overwolf.extensions.current.getExtraObject("discordSharpEntryObject", function(r
 		discordSharpEntryObject.GetUsername(function callback(value)
 		{});
 		discordSharpEntryObject.ExceptionOccurred.addListener(onException);
+		discordSharpEntryObject.TextClientLogAdded.addListener(onLog);
+		discordSharpEntryObject.VoiceClientLogAdded.addListener(onVoiceLog);
 		_discordSharpObject = discordSharpEntryObject;
 	}
 	else {

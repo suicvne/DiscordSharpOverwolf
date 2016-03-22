@@ -27,7 +27,7 @@
 <body>
   <iframe name="lol" style="display:none;"></iframe>
     <p id="kek">:)</p>
-    <form action="#" onsubmit="doLogin(this)" onreset="doLogout(this)" target="lol">
+    <form action="#" onsubmit="doLogin(this)" onreset="doLogout(this)" onload="onLoad(this)" target="lol">
         Discord Email:
         <input type="text" id="emailText" name="emailTextInput"><br>
         Discord Password:
@@ -35,14 +35,14 @@
         <input type="submit" name="submitButton" value="Submit"><br>
         <input type="reset" name="logoutButton" value="Dispose/Logout"/><br />
     </form>
-    <form action="#" onsubmit="sendMessage(this)" target="lol">
-        Server Name:
+    <form action="#" onsubmit="testVoice(this)" target="lol">
+        <!--Server Name:
         <input type="text" id="serverName" name="serverNameInput" /><br />
         Channel Name:
         <input type="text" id="channelName" name="channelNameInput" /><br/>
         Message:
-        <input type="text" id="messageText" name="channelMessageInput" /><br/>
-        <input type="submit" name="submitButton" value="Send Message"/><br/>
+        <input type="text" id="messageText" name="channelMessageInput" /><br/>-->
+        <input type="submit" name="submitButton" value="Test voice"/><br/>
     </form>
 
     <ul id="messageLog">

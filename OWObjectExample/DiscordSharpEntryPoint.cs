@@ -6,6 +6,13 @@ using System.Collections.Generic;
 
 namespace OWObjectExample
 {
+    internal struct VoiceConnectionInformation
+    {
+        //structs are public by default in C++ >.>
+        public DiscordServer server;
+        public DiscordChannel channel;
+    }
+
     public class DiscordSharpEntryPoint
     {
         private DiscordClient client;
@@ -72,6 +79,35 @@ namespace OWObjectExample
             callback.Invoke(exceptionCallbackObject);
         }
         #endregion
+        #region Logging message event
+        public event Action<object> TextClientLogAdded;
+        public LogMessage LastLogMessage;
+        public void GetLastLogMessage(Action<object> callback)
+        {
+            object callbackObject = new
+            {
+                Message = LastLogMessage.Message,
+                Timestamp = LastLogMessage.TimeStamp,
+                Level = LastLogMessage.Level
+            };
+            callback.Invoke(callbackObject);
+        }
+        #endregion
+        #region Voice log message event
+        public event Action<object> VoiceClientLogAdded;
+        public LogMessage LastVoiceLogMessage;
+        public void GetLastVoiceLogMessage(Action<object> callback)
+        {
+            object callbackObject = new
+            {
+                Message = LastLogMessage.Message,
+                Timestamp = LastLogMessage.TimeStamp,
+                Level = LastLogMessage.Level.ToString()
+            };
+            callback.Invoke(callbackObject);
+        }
+        #endregion
+        
         #endregion
 
         #region Getters
@@ -145,6 +181,30 @@ namespace OWObjectExample
                 }
             }
         }
+
+        public void GetChannelByName(Action<object> callback, string serverID, string name, bool voice)
+        {
+            DiscordServer server = client.GetServersList().Find(x => x.id == serverID);
+            if (server != null)
+            {
+                DiscordChannel channel = null;
+                if(voice)
+                    server.channels.Find(x => x.Name.ToLower() == name.ToLower().Trim('#') && x.Type == ChannelType.Voice);
+                else
+                    server.channels.Find(x => x.Name.ToLower() == name.ToLower().Trim('#'));
+                if (channel != null)
+                {
+                    object channelCallbackObject = new
+                    {
+                        ChannelName = channel.Name,
+                        ChannelID = channel.ID,
+                        ChannelTopic = channel.Topic
+                    };
+                    callback.Invoke(channelCallbackObject);
+                }
+            }
+        }
+
         public void GetChannelByID(Action<object> callback, string serverID, string id)
         {
             DiscordServer server = client.GetServersList().Find(x => x.id == serverID);
@@ -166,7 +226,6 @@ namespace OWObjectExample
         #endregion
 
         #region Send Messages
-
         public void SendMessage(Action<object> callback, string serverID, string channelID, string message)
         {
             DiscordServer server = client.GetServersList().Find(x => x.id == serverID);
@@ -189,7 +248,6 @@ namespace OWObjectExample
             }
             callback.Invoke(null);
         }
-
         #endregion
 
         public DiscordSharpEntryPoint() { } //explicit ctor
@@ -208,20 +266,32 @@ namespace OWObjectExample
                     {
                         IsFullyConnected = true;
                         if (OnConnect != null)
-                            OnConnect(new object());
+                            OnConnect(null);
                     };
                     client.SocketClosed += (sender, e) =>
                     {
                         ClosedFormattedReason = $"Closed! Code: {e.Code}. Reason: {e.Reason}";
                         IsFullyConnected = false;
                         if (OnDisconnect != null)
-                            OnDisconnect(new object());
+                            OnDisconnect(null);
                     };
                     client.MessageReceived += (sender, e) =>
                     {
                         LastMessageReceived = e.message;
                         if (MessageReceived != null)
-                            MessageReceived(new object());
+                            MessageReceived(null);
+                    };
+                    client.TextClientDebugMessageReceived += (sender, e) =>
+                    {
+                        LastLogMessage = e.message;
+                        if (TextClientLogAdded != null)
+                            TextClientLogAdded(null);
+                    };
+                    client.VoiceClientDebugMessageReceived += (sender, e) =>
+                    {
+                        LastVoiceLogMessage = e.message;
+                        if (VoiceClientLogAdded != null)
+                            VoiceClientLogAdded(null);
                     };
 
                     if (client.SendLoginRequest() != null)
@@ -236,6 +306,33 @@ namespace OWObjectExample
                         ExceptionOccurred(new object());
                 }
             }
+        }
+
+        public void BeginVoiceConnect(Action<object> callback, string serverID, string channelID)
+        {
+            DiscordServer server = client.GetServersList().Find(x => x.id == serverID);
+            if(server != null)
+            {
+                DiscordChannel channel = server.channels.Find(x => x.ID == channelID);
+                if (channel != null)
+                {
+                    if (channel.Type != ChannelType.Voice)
+                    {
+                        callback.Invoke(new { Message = "Not a voice channel!" });
+                        return;
+                    }
+
+                    client.ConnectToVoiceChannel(channel);
+                    client.VoiceClientConnected += (sender, e) =>
+                    {
+                        callback.Invoke(new { Message = "Connected!" });
+                    };
+                }
+                else
+                    callback.Invoke(new { Message = "Channel was null! ID: " + channelID });
+            }
+            else
+                callback.Invoke(new { Message = "Server was null! ID: " + serverID });
         }
 
         public void Logout()
