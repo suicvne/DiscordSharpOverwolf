@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OWObjectExample", "OWObjectExample.csproj", "{C0601403-0397-4D7E-97AC-F39BD93A3C98}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordSharpOverwolf", "DiscordSharpOverwolf.csproj", "{C0601403-0397-4D7E-97AC-F39BD93A3C98}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

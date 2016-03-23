@@ -78,13 +78,15 @@ function testVoice(form)
 {
     var serverID, channelID;
     _discordSharpObject.GetServerByName(function callback(value) {
+        console.log("voice; getserver: " + value + "; id: " + value.ServerID);
         if (value != null)
             serverID = value.ServerID;
     }, "DiscordSharp Test Server");
-    _discordSharpObject.GetChannelByName(function callback(value) {
+    _discordSharpObject.GetChannelByID(function callback(value) {
+        console.log("voice; getchannel: " + value);
         if (value != null)
             channelID = value.ChannelID;
-    }, serverID, "Testing", true); //true for voice channels only
+    }, serverID, "145308133512708096"); //true for voice channels only
 
     
         _discordSharpObject.BeginVoiceConnect(function callback(value)

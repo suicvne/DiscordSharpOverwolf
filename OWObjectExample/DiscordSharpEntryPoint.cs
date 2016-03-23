@@ -84,6 +84,8 @@ namespace OWObjectExample
         public LogMessage LastLogMessage;
         public void GetLastLogMessage(Action<object> callback)
         {
+            if (LastLogMessage.Message.Contains("No potential server"))
+                return;
             object callbackObject = new
             {
                 Message = LastLogMessage.Message,
@@ -100,9 +102,9 @@ namespace OWObjectExample
         {
             object callbackObject = new
             {
-                Message = LastLogMessage.Message,
-                Timestamp = LastLogMessage.TimeStamp,
-                Level = LastLogMessage.Level.ToString()
+                Message = LastVoiceLogMessage.Message,
+                Timestamp = LastVoiceLogMessage.TimeStamp,
+                Level = LastVoiceLogMessage.Level.ToString()
             };
             callback.Invoke(callbackObject);
         }
