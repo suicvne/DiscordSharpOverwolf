@@ -1,17 +1,48 @@
-﻿using System;
+﻿/**
+
+                                DiscordSharp -> Overwolf Bindings
+
+        * DiscordSharp created by Mike Santiago, released under the MIT Public License
+            * https://github.com/Luigifan/DiscordSharp
+        * The following bindings were made by Mike Santiago for Overwolf. This header will define the coding style.
+
+        Terminology
+            * Javascript object - the anonymous object created in C# (new {property = value})
+
+        C# objects being bound to Overwolf's Javascript API (due to a limitation) must only be single level. Objects cannot be nested.
+
+        You should not use just the C# object's property name inside of the Javascript object. Use the name of the object (minus Discord)
+            and then its property name to define the property.
+                Example: DiscordMessage.Content -> MessageContent
+
+        All events should be redefined as generic Action<object> events.
+
+        You can either setup getters for these events (as I've done) or you could (though, I have not tested) pass in a Javascript
+            object to the event.
+
+        Getters should take in an Action<object> for use as a callback. This is equivalent to a Javascript function callback. Due to
+            another limitation in Overwolf's C# API, this is how it must be done. Construct a Javascript object that you'd want to
+            return and pass it via the callback's Invoke() function.
+
+*/
+
+using System;
 using DiscordSharp;
 using DiscordSharp.Objects;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace OWObjectExample
+namespace DiscordSharp.Overwolf
 {
+#pragma warning disable CS0649 //object not assigned to has null value by default
     internal struct VoiceConnectionInformation
     {
         //structs are public by default in C++ >.>
         public DiscordServer server;
         public DiscordChannel channel;
     }
+#pragma warning restore CS0649
 
     public class DiscordSharpEntryPoint
     {
@@ -109,33 +140,40 @@ namespace OWObjectExample
             callback.Invoke(callbackObject);
         }
         #endregion
-        
+
         #endregion
 
         #region Getters
-        private const string ObjectDelimiter = "Discord";
-        //Sorry, I just got used to Objective C wordy styled calls :D
-        //borked
-        private static object ConvertDiscordObjectToJavascriptObject(object discordObject, Type T)
-        {
-            //Raw name of the object in code
-            //DiscordMessage
-            string nameofObject = T.ToString();
-            string subName = nameofObject.Substring(nameofObject.LastIndexOf(ObjectDelimiter) + ObjectDelimiter.Length); //what the object actually is. Message
+        //private const string ObjectDelimiter = "Discord";
+        ////Sorry, I just got used to Objective C wordy styled calls :D
+        ////borked
+        //private static object ConvertDiscordObjectToJavascriptObject(object discordObject, Type T)
+        //{
+        //    //Raw name of the object in code
+        //    //DiscordMessage
+        //    string nameofObject = T.ToString();
+        //    string subName = nameofObject.Substring(nameofObject.LastIndexOf(ObjectDelimiter) + ObjectDelimiter.Length); //what the object actually is. Message
 
-            PropertyInfo[] properties = T.GetProperties(); //get instance only public properties
-            object returnValue = new object();
-            Dictionary<string, object> returnValueAsDict = (Dictionary<string, object>)returnValue.ToDictionary();
-            foreach (var info in properties)
-            {
-                string anonPropName = subName + info.Name;
-                Console.WriteLine("CLR: Binding property " + info.Name + " as " + subName + info.Name);
-                //returnValueAsDict.AddProperty(anonPropName, info.GetValue(discordObject, null));
-                returnValueAsDict.Add(anonPropName, info.GetValue(discordObject, null));
-            }
-            returnValue = returnValueAsDict;
-            return (object)returnValueAsDict;
-        }
+        //    PropertyInfo[] properties = T.GetProperties(); //get instance only public properties
+        //    object returnValue = new object();
+        //    Dictionary<string, object> returnValueAsDict = (Dictionary<string, object>)returnValue.ToDictionary();
+        //    foreach (var info in properties)
+        //    {
+        //        string anonPropName = subName + info.Name;
+        //        Console.WriteLine("CLR: Binding property " + info.Name + " as " + subName + info.Name);
+        //        //returnValueAsDict.AddProperty(anonPropName, info.GetValue(discordObject, null));
+        //        returnValueAsDict.Add(anonPropName, info.GetValue(discordObject, null));
+        //    }
+        //    returnValue = returnValueAsDict;
+        //    return (object)returnValueAsDict;
+        //}
+
+        #region Server Getters
+        /// <summary>
+        /// Retrieves a server by name.
+        /// </summary>
+        /// <param name="callback">The Javascript function callback.</param>
+        /// <param name="name">The name of the server.</param>
         public void GetServerByName(Action<object> callback, string name)
         {
             DiscordServer server = client.GetServersList().Find(x => x.name.ToLower() == name.ToLower());
@@ -150,6 +188,12 @@ namespace OWObjectExample
                 callback.Invoke(serverCallbackObject);
             }
         }
+
+        /// <summary>
+        /// Retrieves a server by ID.
+        /// </summary>
+        /// <param name="callback">The Javascript function callback.</param>
+        /// <param name="id">The ID of the server.</param>
         public void GetServerByID(Action<object> callback, string id)
         {
             DiscordServer server = client.GetServersList().Find(x => x.id == id);
@@ -164,7 +208,15 @@ namespace OWObjectExample
                 callback.Invoke(serverCallbackObject);
             }
         }
+        #endregion
 
+        #region Channel getters
+        /// <summary>
+        /// Retrieves a channel by its name in the given serverID.
+        /// </summary>
+        /// <param name="callback">The Javascript function callback.</param>
+        /// <param name="serverID">The ID of the server to look in.</param>
+        /// <param name="name">The name of the channel.</param>
         public void GetChannelByName(Action<object> callback, string serverID, string name)
         {
             DiscordServer server = client.GetServersList().Find(x => x.id == serverID);
@@ -184,6 +236,13 @@ namespace OWObjectExample
             }
         }
 
+        /// <summary>
+        /// Retrieves a channel by its name in the given serverID.
+        /// </summary>
+        /// <param name="callback">The Javascript function callback.</param>
+        /// <param name="serverID">The ID of the server to look in.</param>
+        /// <param name="name">The name of the channel.</param>
+        /// <param name="voice">If true, only return voice channels.</param>
         public void GetChannelByName(Action<object> callback, string serverID, string name, bool voice)
         {
             DiscordServer server = client.GetServersList().Find(x => x.id == serverID);
@@ -207,6 +266,12 @@ namespace OWObjectExample
             }
         }
 
+        /// <summary>
+        /// Retrieves a channel by its ID.
+        /// </summary>
+        /// <param name="callback">The Javascript function callback.</param>
+        /// <param name="serverID">The ID the channel belongs in.</param>
+        /// <param name="id">The ID of the channel.</param>
         public void GetChannelByID(Action<object> callback, string serverID, string id)
         {
             DiscordServer server = client.GetServersList().Find(x => x.id == serverID);
@@ -225,6 +290,45 @@ namespace OWObjectExample
                 }
             }
         }
+        #endregion
+
+        #region Member Getters
+
+        public void GetMemberByID(Action<object> callback, string serverID, string memberID)
+        {
+            DiscordServer server = client.GetServersList().Find(x => x.id == serverID);
+            if(server != null)
+            {
+                DiscordMember member = server.members.Find(x => x.ID == memberID);
+                if(member != null)
+                {
+                    object memberCallback = new
+                    {
+                        MemberUsername = member.Username,
+                        MemberAvatarURL = member.GetAvatarURL().ToString(),
+                        MemberID = member.ID,
+                        MemberDiscrim = member.Discriminator,
+                        MemberStatus = member.Status,
+                        MemberCurrentGame = member.CurrentGame
+                    };
+                    callback.Invoke(memberCallback);
+                }
+                else
+                {
+                    object noMemberCallback = new { Message = $"Couldn't find member with ID {memberID} in server {serverID}!" };
+                    callback.Invoke(noMemberCallback);
+                }
+            }
+            else
+            {
+                object noServerCallback = new { Message = "Couldn't find server given ID " + serverID };
+                callback.Invoke(noServerCallback);
+            }
+        }
+
+        #endregion
+
+
         #endregion
 
         #region Send Messages
@@ -298,7 +402,7 @@ namespace OWObjectExample
 
                     if (client.SendLoginRequest() != null)
                     {
-                        client.Connect();
+                        Task.Factory.StartNew(()=>client.Connect());
                     }
                 }
                 catch(Exception ex)
@@ -310,6 +414,7 @@ namespace OWObjectExample
             }
         }
 
+        #region Voice Related
         public void BeginVoiceConnect(Action<object> callback, string serverID, string channelID)
         {
             DiscordServer server = client.GetServersList().Find(x => x.id == serverID);
@@ -336,6 +441,9 @@ namespace OWObjectExample
             else
                 callback.Invoke(new { Message = "Server was null! ID: " + serverID });
         }
+        #endregion
+
+        #region Misc API Features
 
         public void Logout()
         {
@@ -355,36 +463,11 @@ namespace OWObjectExample
             }
         }
 
-        public DiscordServer GetDiscordServerByName(string name)
-        {
-            foreach(var serever in client.GetServersList())
-            {
-                if(serever.name.ToLower() == name.ToLower())
-                {
-                    return serever;
-                }
-            }
-            return null;
-        }
-
-        public DiscordChannel GetTextChannelByName(DiscordServer server, string name)
-        {
-            foreach (var channel in server.channels)
-            {
-                if (channel.Type == ChannelType.Text)
-                {
-                    if (channel.Name.ToLower() == name.ToLower())
-                    {
-                        return channel;
-                    }
-                }
-            }
-            return null;
-        }
-
         public void SendMessageToChannel(string message, DiscordChannel channel)
         {
             client.SendMessageToChannel(message, channel);
         }
+
+        #endregion
     }
 }

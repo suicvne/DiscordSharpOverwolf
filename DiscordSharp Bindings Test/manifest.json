@@ -25,13 +25,9 @@
       }
     },
     "extra-objects": {
-      "extraObject1": {
-        "file": "OWObjectExample.dll",
-        "class": "OWObjectExample.EntryPoint"
-      },
       "discordSharpEntryObject": {
-        "file": "OWObjectExample.dll",
-        "class": "OWObjectExample.DiscordSharpEntryPoint"
+        "file": "DiscordSharp.Overwolf.dll",
+        "class": "DiscordSharp.Overwolf.DiscordSharpEntryPoint"
       },
       "discordSharpClientRaw": {
         "file": "DiscordSharp.dll",

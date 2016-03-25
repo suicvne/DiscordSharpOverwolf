@@ -7,8 +7,8 @@
     <ProjectGuid>{C0601403-0397-4D7E-97AC-F39BD93A3C98}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OWObjectExample</RootNamespace>
-    <AssemblyName>OWObjectExample</AssemblyName>
+    <RootNamespace>DiscordSharp.Overwolf</RootNamespace>
+    <AssemblyName>DiscordSharp.Overwolf</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -32,7 +32,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DiscordSharpEntryPoint.cs" />
-    <Compile Include="EntryPoint.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
